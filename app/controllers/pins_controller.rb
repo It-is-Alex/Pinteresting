@@ -16,10 +16,6 @@ class PinsController < ApplicationController
   def edit
   end
 
-  def correct_user
-    @pin = current_user.pins.find_by(id: params[:id])
-    redirect_to pins_path, notice: "Not Authorized to edit this pin" if @pin.nil?
-  end
 
   def create
     @pin = current_user.pins.build(pin_params)
@@ -49,8 +45,13 @@ class PinsController < ApplicationController
       @pin = Pin.find(params[:id])
     end
 
+    def correct_user
+     @pin = current_user.pins.find_by(id: params[:id])
+     redirect_to pins_path, notice: "Not Authorized to edit this pin" if @pin.nil?
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def pin_params
-      params.require(:pin).permit(:description)
+      params.require(:pin).permit(:description, :image)
     end
 end
